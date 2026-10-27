@@ -1,0 +1,6 @@
+# Source-inferred dependencies; not a tested lockfile.
+jupyterlab
+numpy
+pandas
+kagglehub
+spacy

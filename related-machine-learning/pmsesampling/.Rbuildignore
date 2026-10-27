@@ -1,0 +1,5 @@
+^pmsePackage\.Rproj$
+^\.Rproj\.user$
+^LICENSE\.md$
+^\.tools$
+^pmsesampling_.*\.tar\.gz$

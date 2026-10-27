@@ -1,0 +1,14 @@
+# Kaggle images already include torch; these pins document a tested-compatible stack.
+torch>=2.7,<3
+torchvision>=0.22,<1
+transformers>=4.56,<6
+pydicom>=3.0,<4
+pylibjpeg>=2.0,<3
+pylibjpeg-libjpeg>=2.3,<3
+pylibjpeg-openjpeg>=2.4,<3
+numpy>=1.26,<3
+pandas>=2.2,<4
+scikit-learn>=1.5,<2
+iterative-stratification>=0.1.9,<1
+tqdm>=4.66,<5
+

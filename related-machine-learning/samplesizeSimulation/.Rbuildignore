@@ -1,0 +1,15 @@
+^\.cran-work$
+^\.git$
+^\.gitignore$
+^\.vscode$
+^\.github$
+^helpers$
+^documentation$
+^examples$
+^functionSamplesizeSimu\.R$
+^cran-comments\.md$
+^tests/run_tests\.R$
+^tests/test_framework\.R$
+^.*\.Rcheck$
+^.*\.tar\.gz$
+(^|/)Rplots\.pdf$

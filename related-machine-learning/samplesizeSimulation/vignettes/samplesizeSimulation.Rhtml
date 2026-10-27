@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<!--
+%\VignetteIndexEntry{Sample size planning with samplesizeSimulation}
+%\VignetteEngine{knitr::knitr}
+%\VignetteEncoding{UTF-8}
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sample size planning with samplesizeSimulation</title>
+<style>
+body { max-width: 850px; margin: 2rem auto; padding: 0 1.2rem;
+       font: 17px/1.6 system-ui, sans-serif; color: #1f2937; }
+h1,h2 { line-height: 1.25; color: #123b56; }
+pre { overflow-x: auto; padding: 1rem; background: #f1f5f9; font-size: 14px; }
+code { font-family: ui-monospace, monospace; }
+table { border-collapse: collapse; } td,th { padding: .5rem; border-bottom: 1px solid #ddd; }
+</style>
+</head>
+<body>
+<h1>Sample size planning with samplesizeSimulation</h1>
+<p>Louis Chen</p>
+<p>This package evaluates prediction models across simulated sample sizes.
+The result is an exploratory learning curve under a specified data generating
+mechanism. It does not estimate formal statistical power.</p>
+<!--begin.rcode setup, include=FALSE
+library(samplesizeSimulation)
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", cache = FALSE)
+end.rcode-->
+<h2>A small reproducible simulation</h2>
+<p>These examples use deliberately few repetitions to keep checks fast.
+For substantive studies, increase repetitions and examine Monte Carlo stability.</p>
+<!--begin.rcode simulation
+result <- run_general_simulation(
+  sample_sizes = c(30, 60, 90),
+  n_simulations = 3,
+  target_models = "lm",
+  metrics = c("mse", "r_squared"),
+  infinite_n = NULL,
+  cv_folds = 3,
+  cv_repeats = 1,
+  seed = 123,
+  verbose = FALSE
+)
+summary(result)
+result$results$lm$mse
+end.rcode-->
+<h2>Interpret the recommendation</h2>
+<p>Candidate sizes count total generated observations. Cross-validation trains
+on fewer observations. Error-metric efficiency measures the fraction of the
+observed improvement from the smallest to largest candidate size. For metrics
+where larger is better, efficiency is the ratio to performance at the largest
+size. Values are clipped to [0, 1]. A 0.95 threshold is therefore a relative
+performance convention; it does not mean 95% confidence, 95% accuracy, or
+95% statistical power.</p>
+<p>The argument <code>infinite_n</code> adds a finite reference simulation. It
+cannot establish a known infinite-sample limit. Recommendations depend on the
+candidate grid, reference run, model, metric, effect assumptions, and validation
+design. A deteriorating error reference, a missing endpoint, or a nonpositive
+higher-is-better reference produces a missing recommendation. Equal endpoint
+errors use efficiency one by convention and deserve inspection.</p>
+<p>The columns <code>q025</code> and <code>q975</code> summarize variability
+across simulations; they are not confidence limits for the mean. Inspect
+<code>n_success</code> and <code>n_failed</code> before relying on an average.</p>
+<h2>Reuse simulations</h2>
+<!--begin.rcode cache
+cached <- run_general_simulation(
+  sample_sizes = c(30, 60, 90),
+  n_simulations = 3,
+  target_models = "lm",
+  metrics = c("mse", "r_squared"),
+  infinite_n = NULL,
+  cv_folds = 3,
+  cv_repeats = 1,
+  seed = 123,
+  verbose = FALSE,
+  lookup_table = result
+)
+cached$cache
+recommend_from_simulation_table(cached$simulation_table)
+end.rcode-->
+<p>Tables reuse exact configuration keys with matching model, metric, and sample
+size. Updated methods invalidate earlier cache keys. Keys do not certify
+compatibility across R or dependency versions; retain session information and
+regenerate tables after changing the modeling environment.</p>
+<h2>Evaluate existing ordered observations</h2>
+<p>Use original observations for a sequential prediction task. The ordered
+evaluator trains on earlier blocks and evaluates subsequent blocks.</p>
+<!--begin.rcode ordered
+observations <- data.frame(
+  time = seq_len(60),
+  x = sin(seq_len(60) / 5),
+  y = sin(seq_len(60) / 5) + cos(seq_len(60) / 3)
+)
+fit_and_evaluate_model(
+  data = observations,
+  model_type = "lm",
+  response_var = "y",
+  predictor_vars = "x",
+  metrics = "mse",
+  cv_folds = 3,
+  cv_repeats = 1,
+  validation_strategy = "ordered",
+  order_var = "time"
+)
+end.rcode-->
+<p>This example illustrates the interface, not a validated forecasting system.
+The evaluator does not implement gaps, purging of overlapping outcome periods,
+grouped folds, or automatic refitting of feature preprocessing inside folds.
+Ordered validation is disallowed with bootstrap or synthetic resampling in the
+simulation function. Random bootstrap folds can share duplicate original
+records and do not establish independent external performance.</p>
+<h2>Models and metrics</h2>
+<!--begin.rcode catalog
+get_model_registry(available_only = TRUE)
+calculate_metrics(c(0, 0, 1, 1), c(0.2, 0.1, 0.8, 0.9),
+                  c("auc", "accuracy", "brier"))
+end.rcode-->
+<p>Optional learners require their listed packages. Classification metrics
+require 0/1 outcomes; AUC is missing when only one class occurs. Ordinal metrics
+score numeric category ranks. Mixed targets require a <code>.group</code> column
+and fit random intercepts with population-level predictions. Parametric
+categorical predictors use numeric scores; empirical predictors can be factors.
+Adjusted R-squared and a standalone efficiency metric are not supported.</p>
+<h2>Practical limits</h2>
+<p>The package operates on tabular predictors. Image models require an embedding
+or learner adapter and independent image/group splits. Financial applications
+require original chronological data, market-regime validation, and execution
+costs in an external backtest. Relative sample-size convergence alone cannot
+justify a trade. Parallel execution is not implemented. Results are written
+only when an output directory is explicitly supplied.</p>
+</body>
+</html>

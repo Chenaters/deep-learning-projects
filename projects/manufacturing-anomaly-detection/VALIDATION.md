@@ -1,0 +1,5 @@
+# Validation during publication preparation
+
+PASS: all 6 existing unittest tests, including synthetic-data training, serialization and scoring. Used a local environment with NumPy 2.5.2, pandas 3.0.5, scikit-learn 1.9.0 and joblib 1.5.3. Temporary files were redirected to the working directory because the default sandbox temp path was inaccessible. The original project virtual environment failed to load a SciPy extension under Windows application control; the working equivalent environment was used for the successful tests. No full 6,000-row rerun, container build or service deployment was performed.
+
+Python source and notebook code cells were parsed for syntax (IPython magic lines excluded). All notebook schemas were validated with nbformat; outputs, execution counts and attachments were cleared. Prepared files were checked for credential patterns, personal absolute paths and unwanted binary/data files. A clean pattern scan is a limited check, not proof of ownership or complete secret detection.

@@ -1,0 +1,21 @@
+Package: samplesizeSimulation
+Title: Simulation Based Sample Size Planning for Prediction Models
+Version: 0.1.0
+Authors@R: person("Louis", "Chen", email = "chenaters@gmail.com",
+    role = c("aut", "cre", "cph"))
+Description: Estimates prediction performance across candidate sample sizes
+    using simulated or resampled tabular data. Compares statistical and machine
+    learning models with random or forward chaining validation, summarizes
+    Monte Carlo variability, and reuses configuration matched simulation tables.
+    Relative performance thresholds provide exploratory sample size
+    recommendations under the specified data generating assumptions.
+License: GPL-3
+Encoding: UTF-8
+Depends: R (>= 4.1.0)
+Imports: MASS, stats, utils, graphics, grDevices, tools
+Suggests: testthat (>= 3.0.0), knitr, mgcv, nnet, rpart,
+    randomForest, gbm, e1071, glmnet, lme4, synthpop, pROC,
+    ggplot2 (>= 3.4.0), progress
+VignetteBuilder: knitr
+Config/testthat/edition: 3
+Config/roxygen2/version: 8.1.0

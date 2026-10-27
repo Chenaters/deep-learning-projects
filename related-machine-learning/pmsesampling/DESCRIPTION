@@ -1,0 +1,23 @@
+Package: pmsesampling
+Title: Sample Size Determination for Predictive Models
+Version: 0.1.1
+Authors@R: 
+    c(person("Louis", "Chen", email = "chenaters@gmail.com", role = c("aut","cre")),
+    person("Zheyang", "Wu", email = "zheyangwu@wpi.edu", role = c("aut", "ths")))
+Description: Provides analytic and empirical tools to estimate the minimum
+    sample size required for achieving a target prediction mean-squared error
+    (PMSE). Implements the nested ordinary least-squares criteria of Ma (2023)
+    <https://digital.wpi.edu/downloads/0g354j58c> and reusable learning-curve
+    tables for ridge, nearest-neighbor, and user-defined machine-learning
+    models. Table reuse and a closed-form PMSE solution avoid repeated fitting
+    and numerical root searches.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+Imports:
+	stats
+Suggests:
+  testthat(>= 3.0.0)
+BugReports: https://github.com/Chenaters/pmsesampling/issues
+URL: https://github.com/Chenaters/pmsesampling
+Config/roxygen2/version: 8.1.0

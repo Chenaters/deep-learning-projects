@@ -1,0 +1,48 @@
+name: Python CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.12", "3.13"]
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - name: Install package
+        run: python -m pip install -e .
+      - name: Run unit and pipeline tests
+        run: python -m unittest discover -s tests -v
+      - name: Train integration artifact
+        run: python -m crowe_anomaly.train --rows 2000 --max-iter 120
+      - name: Enforce minimum recall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          metrics = json.loads(Path("artifacts/metrics.json").read_text())
+          recall = metrics["autoencoder_test"]["recall"]
+          if recall < 0.70:
+              raise SystemExit(f"Recall gate failed: {recall:.3f}")
+          print(f"Recall gate passed: {recall:.3f}")
+          PY
+      - name: Upload model diagnostics
+        uses: actions/upload-artifact@v4
+        with:
+          name: model-diagnostics-py${{ matrix.python-version }}
+          path: |
+            artifacts/metrics.json
+            artifacts/stakeholder_summary.md
+

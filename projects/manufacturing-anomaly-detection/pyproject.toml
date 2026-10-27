@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=80"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "crowe-ml-anomaly-lab"
+version = "0.1.0"
+description = "A Crowe-aligned enterprise anomaly-detection learning project"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+  "joblib==1.5.3",
+  "numpy==2.5.2",
+  "pandas==3.0.5",
+  "scikit-learn==1.9.0",
+]
+
+[project.scripts]
+crowe-generate = "crowe_anomaly.data:main"
+crowe-train = "crowe_anomaly.train:main"
+crowe-score = "crowe_anomaly.score:main"
+crowe-serve = "crowe_anomaly.service:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "UP", "B", "SIM"]
+
