@@ -1,0 +1,13 @@
+# Inferred from source imports; this is not a tested dependency lock.
+jupyterlab
+numpy
+pandas
+matplotlib
+seaborn
+scikit-learn
+pillow
+tensorflow
+torch
+torchvision
+timm
+tqdm

@@ -14,6 +14,12 @@ setup instructions, data requirements, and validation notes.
 | [CUDA deep-learning benchmark](projects/cuda-deep-learning-benchmark/) | Matrix throughput and synthetic convolutional-network training on CUDA | CLI loaded; hardware-specific results intentionally excluded |
 | [IMSA named entity recognition](projects/imsa-nlp-projects/) | spaCy neural NER training from CoNLL BIO annotations | Notebook format and source syntax checked; training not rerun |
 
+## Published experiments
+
+| Project | Included approaches | Status |
+| --- | --- | --- |
+| [CSIRO biomass experiments](projects/csiro-biomass-experiments/) | CNN baselines and data exploration plus small DINO regression, validation and submission helpers | Experimental coursework; full reproduction pending; known data/checkpoint-loading issues documented |
+
 ## Related machine-learning research
 
 These R packages support prediction-model research and are included separately
@@ -48,5 +54,5 @@ for this publication. Historical example metrics are labeled where retained.
 IMSA exercises are labeled as coursework. Research-package author and license
 declarations are preserved. See [NOTICE.md](NOTICE.md) for licensing context.
 Datasets, pretrained weights, notebook outputs, local environments, credentials,
-and private audit files are excluded. Incomplete experiments are kept outside
-this published collection until their documented issues are resolved.
+and private audit files are excluded. The CSIRO experiments are published with their limitations documented. Other
+incomplete experiments remain outside this collection.
